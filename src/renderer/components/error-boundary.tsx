@@ -4,6 +4,7 @@ import { ErrorPage } from "./error-page";
 
 type PageRegistration = Renderer.LensExtension["clusterPages"][number];
 type MenuRegistration = Renderer.LensExtension["kubeObjectMenuItems"][number];
+type DetailRegistration = Renderer.LensExtension["kubeObjectDetailItems"][number];
 
 export interface ErrorBoundaryProps {
   extension: Renderer.LensExtension;
@@ -84,21 +85,20 @@ export function withPageErrorBoundary(
 }
 
 /**
- * The registration of a details panel, made as a raw `kubeObjectDetailItems` entry, with the panel inside an error
- * boundary that renders it again for a new object. The KubeObject type flows through, so the wrapper keeps the
- * `object` prop of the panel typed as its model.
+ * The registration of a details panel, made as a `kubeObjectDetailItems` entry, with the panel inside an error
+ * boundary that renders it again for a new object. The registration type flows through.
  */
-export function withDetailsErrorBoundary<Kube extends Renderer.K8sApi.KubeObject>(
+export function withDetailsErrorBoundary<R extends DetailRegistration>(
   extension: Renderer.LensExtension,
-  registration: Common.Types.KubeObjectDetailRegistration<Kube>,
-): Common.Types.KubeObjectDetailRegistration<Kube> {
+  registration: R,
+): R {
   const { Details } = registration.components;
 
   return {
     ...registration,
     components: {
       ...registration.components,
-      Details: (props) => (
+      Details: (props: any) => (
         <ErrorBoundary extension={extension} resetKey={props.object}>
           <Details {...props} />
         </ErrorBoundary>
@@ -108,20 +108,20 @@ export function withDetailsErrorBoundary<Kube extends Renderer.K8sApi.KubeObject
 }
 
 /**
- * The registration of a menu item, made as a raw `kubeObjectMenuItems` entry, with the item inside an error boundary
+ * The registration of a menu item, made as a `kubeObjectMenuItems` entry, with the item inside an error boundary
  * that renders nothing in the menu after an error, and renders the item again for a new object.
  */
-export function withMenuItemErrorBoundary(
+export function withMenuItemErrorBoundary<R extends MenuRegistration>(
   extension: Renderer.LensExtension,
-  registration: MenuRegistration,
-): MenuRegistration {
+  registration: R,
+): R {
   const { MenuItem } = registration.components;
 
   return {
     ...registration,
     components: {
       ...registration.components,
-      MenuItem: (props) => (
+      MenuItem: (props: any) => (
         <ErrorBoundary extension={extension} fallback="nothing" resetKey={props.object}>
           <MenuItem {...props} />
         </ErrorBoundary>

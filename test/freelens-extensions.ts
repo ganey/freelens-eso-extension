@@ -36,6 +36,8 @@ class KubeObject {
   }
 }
 
+class LensExtensionKubeObject extends KubeObject {}
+
 // As the host's: an api created from the model class, whose `apiBase` comes
 // from the `objectConstructor` static.
 class KubeApi {
@@ -154,9 +156,28 @@ export const Renderer = {
   },
   K8sApi: {
     KubeObject,
+    LensExtensionKubeObject,
     KubeApi,
     KubeObjectStore,
     apiManager,
+    detailsFor: (kubeObjectClass: any, registration: any) => ({
+      kind: kubeObjectClass.kind,
+      apiVersions: kubeObjectClass.crd?.apiVersions ?? [],
+      ...registration,
+    }),
+    menuItemFor: (kubeObjectClass: any, registration: any) => ({
+      kind: kubeObjectClass.kind,
+      apiVersions: kubeObjectClass.crd?.apiVersions ?? [],
+      ...registration,
+    }),
+  },
+  LensExtension: class LensExtension {
+    name = "freelens-eso-extension";
+    customResources: any[] = [];
+    clusterPages: any[] = [];
+    clusterPageMenus: any[] = [];
+    kubeObjectDetailItems: any[] = [];
+    kubeObjectMenuItems: any[] = [];
   },
 };
 

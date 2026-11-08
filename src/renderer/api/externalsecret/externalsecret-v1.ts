@@ -6,11 +6,14 @@ import type { EsoCondition, EsoKubeObjectCRD, ExternalSecretSpec, ExternalSecret
 
 export type { ExternalSecretSpec, ExternalSecretStatus };
 
-export class ExternalSecret extends Renderer.K8sApi.KubeObject<
+export class ExternalSecret extends Renderer.K8sApi.LensExtensionKubeObject<
   Renderer.K8sApi.KubeObjectMetadata,
   ExternalSecretStatus,
   ExternalSecretSpec
 > {
+  declare kind: "ExternalSecret";
+  declare apiVersion: "external-secrets.io/v1";
+
   static readonly kind = "ExternalSecret";
   static readonly namespaced = true;
   static readonly apiBase = "/apis/external-secrets.io/v1/externalsecrets";

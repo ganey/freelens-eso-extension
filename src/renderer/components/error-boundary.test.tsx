@@ -26,7 +26,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const Throws = ({ message = "boom" }: { message?: string }): JSX.Element => {
+const Throws = ({ message = "boom" }: { message?: string }): React.JSX.Element => {
   throw new Error(message);
 };
 
@@ -182,7 +182,7 @@ describe("the registration wrappers", () => {
     const { MenuItem } = withMenuItemErrorBoundary(extension, {
       kind: "ExternalSecret",
       apiVersions: ["external-secrets.io/v1"],
-      components: { MenuItem: () => <Throws message="menu item" /> },
+      components: { MenuItem: (_props: any) => <Throws message="menu item" /> },
     }).components;
 
     render(

@@ -41,6 +41,8 @@ const ClusterSecretStoresPageAvailable = createAvailableVersionPage("Cluster Sec
 // replace the whole cluster view. Each registration field is mapped through its wrapper, so an entry added to it is
 // wrapped too.
 export default class EsoRenderer extends Renderer.LensExtension {
+  customResources: Renderer.LensExtension["customResources"] = [ExternalSecret, SecretStore, ClusterSecretStore];
+
   clusterPages: Renderer.LensExtension["clusterPages"] = [
     {
       id: "external-secrets",
@@ -97,31 +99,21 @@ export default class EsoRenderer extends Renderer.LensExtension {
   // The components are registered as they are: their props are typed with the model, and the error boundary wrapper
   // keeps that type, so a panel or an item written for another kind fails the type check.
   kubeObjectDetailItems: Renderer.LensExtension["kubeObjectDetailItems"] = [
-    {
-      kind: ExternalSecret.kind,
-      apiVersions: ExternalSecret.crd.apiVersions,
-      priority: 10,
-      components: { Details: ExternalSecretDetails },
-    },
-    {
-      kind: SecretStore.kind,
-      apiVersions: SecretStore.crd.apiVersions,
-      priority: 10,
-      components: { Details: StoreDetails },
-    },
-    {
-      kind: ClusterSecretStore.kind,
-      apiVersions: ClusterSecretStore.crd.apiVersions,
-      priority: 10,
-      components: { Details: StoreDetails },
-    },
-  ].map((registration) => withDetailsErrorBoundary(this, registration));
+    withDetailsErrorBoundary(
+      this,
+      Renderer.K8sApi.detailsFor(ExternalSecret, { priority: 10, Details: ExternalSecretDetails }),
+    ),
+    withDetailsErrorBoundary(this, Renderer.K8sApi.detailsFor(SecretStore, { priority: 10, Details: StoreDetails })),
+    withDetailsErrorBoundary(
+      this,
+      Renderer.K8sApi.detailsFor(ClusterSecretStore, { priority: 10, Details: StoreDetails }),
+    ),
+  ];
 
   kubeObjectMenuItems: Renderer.LensExtension["kubeObjectMenuItems"] = [
-    {
-      kind: ExternalSecret.kind,
-      apiVersions: ExternalSecret.crd.apiVersions,
-      components: { MenuItem: ExternalSecretForceSyncMenuItem },
-    },
-  ].map((registration) => withMenuItemErrorBoundary(this, registration));
+    withMenuItemErrorBoundary(
+      this,
+      Renderer.K8sApi.menuItemFor(ExternalSecret, { MenuItem: ExternalSecretForceSyncMenuItem }),
+    ),
+  ];
 }

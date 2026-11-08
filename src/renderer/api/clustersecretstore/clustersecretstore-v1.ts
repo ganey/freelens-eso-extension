@@ -19,11 +19,14 @@ import type {
 
 export type { SecretStoreSpec, SecretStoreStatus };
 
-export class ClusterSecretStore extends Renderer.K8sApi.KubeObject<
+export class ClusterSecretStore extends Renderer.K8sApi.LensExtensionKubeObject<
   Renderer.K8sApi.KubeObjectMetadata,
   SecretStoreStatus,
   SecretStoreSpec
 > {
+  declare kind: "ClusterSecretStore";
+  declare apiVersion: "external-secrets.io/v1";
+
   static readonly kind = "ClusterSecretStore";
   static readonly namespaced = false;
   static readonly apiBase = "/apis/external-secrets.io/v1/clustersecretstores";

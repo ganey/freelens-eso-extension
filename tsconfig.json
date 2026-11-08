@@ -1,12 +1,22 @@
 {
-  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["*.ts", "src/**/*"],
   "compilerOptions": {
-    "composite": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node10",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
     "jsx": "react-jsx",
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
     "allowArbitraryExtensions": true,
-    "types": ["vite/client", "electron-vite/node"]
-  }
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist", "out"]
 }

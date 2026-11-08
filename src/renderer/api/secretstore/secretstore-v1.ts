@@ -19,11 +19,14 @@ import type {
 
 export type { SecretStoreSpec, SecretStoreStatus };
 
-export class SecretStore extends Renderer.K8sApi.KubeObject<
+export class SecretStore extends Renderer.K8sApi.LensExtensionKubeObject<
   Renderer.K8sApi.KubeObjectMetadata,
   SecretStoreStatus,
   SecretStoreSpec
 > {
+  declare kind: "SecretStore";
+  declare apiVersion: "external-secrets.io/v1";
+
   static readonly kind = "SecretStore";
   static readonly namespaced = true;
   static readonly apiBase = "/apis/external-secrets.io/v1/secretstores";

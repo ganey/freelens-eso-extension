@@ -1,18 +1,4 @@
 allowBuilds:
-  '@parcel/watcher': false
-  electron: false
-  esbuild: false
-  node-pty: false
-
-engineStrict: true
-
-# Hoisted layout: keeps every dependency flat under node_modules/.
-nodeLinker: hoisted
-
-# pnpm holds back any version younger than minimumReleaseAge (1 day by
-# default). @freelensapp/extensions is a version range adopted from the
-# fluxcd extension, which is often updated on the day it is published.
-minimumReleaseAgeExclude:
-  - '@freelensapp/extensions'
-
-shellEmulator: true
+  '@biomejs/biome': true
+  '@parcel/watcher': true
+  esbuild: true
